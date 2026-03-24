@@ -23,6 +23,7 @@
     </developers>
     <modules>
         <module>member</module>
+        <module>common</module>
     </modules>
     <scm>
         <connection/>
