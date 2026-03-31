@@ -14,7 +14,7 @@
 
     <!-- 日志格式（含 traceId） -->
     <property name="LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}] %logger{36} - %msg%n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{LOG_ID}] %logger{36} - %msg%n"/>
 
     <!-- ================= Console ================= -->
 

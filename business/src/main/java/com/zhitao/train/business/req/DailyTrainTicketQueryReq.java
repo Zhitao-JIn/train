@@ -1,0 +1,73 @@
+package com.zhitao.train.business.req;
+
+import com.zhitao.train.common.req.PageReq;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+
+
+public class DailyTrainTicketQueryReq extends PageReq {
+
+    /**
+     * 日期
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+
+    /**
+     * 车次编号
+     */
+    private String trainCode;
+
+    /**
+     * 出发站
+     */
+    private String start;
+
+    /**
+     * 到达站
+     */
+    private String end;
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getTrainCode() {
+        return trainCode;
+    }
+
+    public void setTrainCode(String trainCode) {
+        this.trainCode = trainCode;
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    @Override
+    public String toString() {
+        return "DailyTrainTicketQueryReq{" +
+                "date=" + date +
+                ", trainCode='" + trainCode + '\'' +
+                ", start='" + start + '\'' +
+                ", end='" + end + '\'' +
+                "} " + super.toString();
+    }
+}

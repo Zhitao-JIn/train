@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(
         scanBasePackages =  {
-                "com.zhitao.train.member",
-                "com.zhitao.train.common.log"
+                "com.zhitao.train.gateway"
         }
 )
 public class GatewayApplication {
