@@ -46,6 +46,5 @@
             <artifactId>hutool-all</artifactId>
             <version>5.8.31</version>
         </dependency>
-
     </dependencies>
 </project>
