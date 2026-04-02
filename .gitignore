@@ -34,3 +34,10 @@ build/
 
 ### Log ###
 logs/
+
+### third paltfrom ###
+/nacos/
+/redis/
+/seata/
+/jmeter/
+/rocketMQ/
