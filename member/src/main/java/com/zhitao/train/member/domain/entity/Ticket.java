@@ -35,7 +35,7 @@ public class Ticket {
     private String passengerName;
 
     @NotNull
-    @Column(name = "date", nullable = false)
+    @Column(name = "train_date", nullable = false)
     private LocalDate date;
 
     @Size(max = 20)
@@ -49,16 +49,16 @@ public class Ticket {
 
     @Size(max = 2)
     @NotNull
-    @Column(name = "`row`", nullable = false, length = 2)
+    @Column(name = "`seat_row`", nullable = false, length = 2)
     private String row;
 
     @NotNull
-    @Column(name = "col", nullable = false)
+    @Column(name = "seat_col", nullable = false)
     private String col;
 
     @Size(max = 20)
     @NotNull
-    @Column(name = "`start`", nullable = false, length = 20)
+    @Column(name = "`start_station`", nullable = false, length = 20)
     private String start;
 
     @NotNull
@@ -67,7 +67,7 @@ public class Ticket {
 
     @Size(max = 20)
     @NotNull
-    @Column(name = "`end`", nullable = false, length = 20)
+    @Column(name = "`end_station`", nullable = false, length = 20)
     private String end;
 
     @NotNull

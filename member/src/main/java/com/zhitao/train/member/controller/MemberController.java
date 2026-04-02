@@ -5,17 +5,24 @@ import com.zhitao.train.member.dto.MemberDto;
 import com.zhitao.train.member.service.MemberService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/member")
+@RefreshScope
 public class MemberController {
     @Resource
     private MemberService memberService;
 
+    @Value("${test.nacos}")
+    private String nacos;
+
+
     @GetMapping("/hello")
     public CommonResp<Object> hello(){
-        return CommonResp.builder().message("hello").success(true).build();
+        return CommonResp.builder().message(nacos).success(true).build();
     }
     @GetMapping("/count")
     public CommonResp<MemberDto> findByMobile(MemberDto memberDto){

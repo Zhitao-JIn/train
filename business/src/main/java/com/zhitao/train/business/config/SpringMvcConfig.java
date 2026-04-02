@@ -1,6 +1,6 @@
 package com.zhitao.train.business.config;
 
-import com.zhitao.train.common.interceptor.LogInterceptor;
+import com.zhitao.train.common.interceptor.RequestInterceptor;
 import com.zhitao.train.common.interceptor.MemberInterceptor;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
@@ -11,14 +11,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SpringMvcConfig implements WebMvcConfigurer {
 
    @Resource
-   LogInterceptor logInterceptor;
+   RequestInterceptor requstInterceptor;
 
    @Resource
    MemberInterceptor memberInterceptor;
 
    @Override
    public void addInterceptors(InterceptorRegistry registry) {
-      registry.addInterceptor(logInterceptor)
+      registry.addInterceptor(requstInterceptor)
               .addPathPatterns("/**");
 
       registry.addInterceptor(memberInterceptor)

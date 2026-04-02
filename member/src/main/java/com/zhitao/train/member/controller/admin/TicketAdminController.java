@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/ticket")
+@RequestMapping("/member/admin/ticket")
 public class TicketAdminController {
 
     @Resource

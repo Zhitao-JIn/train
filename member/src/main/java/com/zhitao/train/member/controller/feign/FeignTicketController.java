@@ -23,4 +23,9 @@ public class FeignTicketController {
         return new CommonResp<>();
     }
 
+    @GetMapping("/hello")
+    public CommonResp hello() {
+        return new CommonResp<>(true,"hello");
+    }
+
 }

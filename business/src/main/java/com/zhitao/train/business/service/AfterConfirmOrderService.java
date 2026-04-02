@@ -1,50 +1,30 @@
 package com.zhitao.train.business.service;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.EnumUtil;
-import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.zhitao.train.business.domain.entity.ConfirmOrder;
-import com.zhitao.train.business.domain.entity.DailyTrainCarriage;
 import com.zhitao.train.business.domain.entity.DailyTrainSeat;
 import com.zhitao.train.business.domain.entity.DailyTrainTicket;
 import com.zhitao.train.business.domain.repository.ConfirmOrderRepository;
 import com.zhitao.train.business.domain.repository.DailyTrainSeatRepository;
 import com.zhitao.train.business.domain.repository.DailyTrainTicketRepository;
 import com.zhitao.train.business.enums.ConfirmOrderStatusEnum;
-import com.zhitao.train.business.enums.SeatColEnum;
-import com.zhitao.train.business.enums.SeatTypeEnum;
 import com.zhitao.train.business.feign.MemberFeign;
-import com.zhitao.train.business.req.ConfirmOrderDoReq;
-import com.zhitao.train.business.req.ConfirmOrderQueryReq;
 import com.zhitao.train.business.req.ConfirmOrderTicketReq;
 import com.zhitao.train.business.req.MemberTicketReq;
-import com.zhitao.train.business.resp.ConfirmOrderQueryResp;
 import com.zhitao.train.common.context.LoginMemberContext;
 import com.zhitao.train.common.exception.BusinessException;
 import com.zhitao.train.common.exception.BusinessExceptionEnum;
 import com.zhitao.train.common.resp.CommonResp;
-import com.zhitao.train.common.resp.PageResp;
-import com.zhitao.train.common.util.SnowUtil;
+import io.seata.core.context.RootContext;
+import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AfterConfirmOrderService {
@@ -57,9 +37,13 @@ public class AfterConfirmOrderService {
     private DailyTrainTicketRepository dailyTrainTicketRepository;
     @Resource
     private MemberFeign memberFeign;
+    @Resource
+    private ConfirmOrderRepository confirmOrderRepository;
 
-    @Transactional
-    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket,List<DailyTrainSeat> dailyTrainSeatList,List<ConfirmOrderTicketReq> confirmOrderTicketReqList){
+    @GlobalTransactional
+    @Transactional(rollbackFor = Exception.class)
+    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> dailyTrainSeatList, List<ConfirmOrderTicketReq> confirmOrderTicketReqList, ConfirmOrder confirmOrder){
+        LOG.info("seata全局事务ID:{}", RootContext.getXID());
         for (int j =0 ;j<dailyTrainSeatList.size();j++) {
             DailyTrainSeat dailyTrainSeat = dailyTrainSeatList.get(j);
             dailyTrainSeat.setUpdateTime(Instant.now());
@@ -152,12 +136,15 @@ public class AfterConfirmOrderService {
             memberTicketReq.setStartTime(dailyTrainTicket.getStartTime());
             memberTicketReq.setEnd(dailyTrainTicket.getEnd());
             memberTicketReq.setEndTime(dailyTrainTicket.getEndTime());
+            memberTicketReq.setSeatType(dailyTrainSeat.getSeatType());
 
 
             CommonResp<Object> commonResp = memberFeign.save(memberTicketReq);
             LOG.info("调用member接口，返回：{}", commonResp);
-            if (!commonResp.getSuccess()) throw new BusinessException(BusinessExceptionEnum.BUSiNESS_MEMBER_FEIGN_TICKET_SAVE_ERROR);
-            memberTicketReq.setSeatType(dailyTrainSeat.getSeatType());
+            //if (!commonResp.getSuccess())
+            confirmOrder.setUpdateTime(Instant.now());
+            confirmOrder.setStatus(ConfirmOrderStatusEnum.SUCCESS.getCode());
+            confirmOrderRepository.save(confirmOrder);
         }
 
     }

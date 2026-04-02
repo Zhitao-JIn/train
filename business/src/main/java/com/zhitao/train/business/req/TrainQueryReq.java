@@ -9,4 +9,9 @@ public class TrainQueryReq extends PageReq {
         return "TrainQueryReq{" +
                 "} " + super.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return getPage() == ((TrainQueryReq)obj).getPage()&&getSize() == ((TrainQueryReq)obj).getSize();
+    }
 }

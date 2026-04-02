@@ -3,20 +3,21 @@ package com.zhitao.train.business.req;
 import com.zhitao.train.common.req.PageReq;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class DailyTrainQueryReq extends PageReq {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     private String code;
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

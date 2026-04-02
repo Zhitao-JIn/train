@@ -1,4 +1,4 @@
-package com.zhitao.train.gateway.config;
+package com.zhitao.train.gateway.filter;
 
 import com.zhitao.train.gateway.util.JwtUtil;
 import org.slf4j.Logger;
@@ -22,6 +22,7 @@ public class LoginMemberFilter implements Ordered, GlobalFilter {
 
         // 排除不需要拦截的请求
         if (path.contains("/admin")
+                || path.contains("/redis")
                 || path.contains("/hello")
                 || path.contains("/member/login")
                 || path.contains("/member/send-code")

@@ -15,6 +15,7 @@ import com.zhitao.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,6 +61,7 @@ public class TrainService {
         }
     }
 
+
     public PageResp<TrainQueryResp> queryList(TrainQueryReq req) {
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());
@@ -82,6 +84,7 @@ public class TrainService {
         trainRepository.deleteById(id);
     }
 
+    @Cacheable(value = "TrainService.queryAll")
     public List<TrainQueryResp> queryAll() {
         List<Train> trainList = trainRepository.findAllByOrderByIdAsc();
         return BeanUtil.copyToList(trainList, TrainQueryResp.class);

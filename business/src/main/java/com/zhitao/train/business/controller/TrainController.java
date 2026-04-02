@@ -1,5 +1,6 @@
 package com.zhitao.train.business.controller;
 
+import com.zhitao.train.business.feign.MemberFeign;
 import com.zhitao.train.business.resp.TrainQueryResp;
 import com.zhitao.train.business.service.TrainService;
 import com.zhitao.train.common.resp.CommonResp;
@@ -17,10 +18,18 @@ public class TrainController {
     @Resource
     private TrainService trainService;
 
+    @Resource
+    private MemberFeign memberFeign;
+
     @GetMapping("/query-all")
     public CommonResp<List<TrainQueryResp>> queryList() {
         List<TrainQueryResp> list = trainService.queryAll();
         return new CommonResp<>(list);
+    }
+
+    @GetMapping("/hello")
+    public CommonResp<String> hello() {
+        return new CommonResp<>(memberFeign.hello());
     }
 
 }

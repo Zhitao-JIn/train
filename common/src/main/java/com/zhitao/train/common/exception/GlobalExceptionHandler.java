@@ -1,8 +1,10 @@
 package com.zhitao.train.common.exception;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.zhitao.train.common.resp.CommonResp;
+import io.seata.core.context.RootContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,8 +24,11 @@ public class GlobalExceptionHandler {
         }
     }*/
     @ExceptionHandler(Exception.class)
-    public CommonResp<Object> handleException(Exception e){
+    public CommonResp<Object> handleException(Exception e) throws Exception {
         LOG.error("捕获异常:"+e.getMessage());
+        if(StrUtil.isNotBlank(RootContext.getXID())){
+            throw e;
+        }
         return new CommonResp<>(false,"请联系管理员:"+e.getMessage());
     }
     /*

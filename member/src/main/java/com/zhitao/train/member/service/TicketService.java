@@ -5,6 +5,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.zhitao.train.common.exception.BusinessException;
+import com.zhitao.train.common.exception.BusinessExceptionEnum;
 import com.zhitao.train.common.resp.PageResp;
 import com.zhitao.train.common.util.SnowUtil;
 import com.zhitao.train.member.domain.entity.Ticket;
@@ -12,6 +14,7 @@ import com.zhitao.train.member.domain.repository.TicketRepository;
 import com.zhitao.train.member.req.TicketQueryReq;
 import com.zhitao.train.member.req.TicketSaveReq;
 import com.zhitao.train.member.resp.TicketQueryResp;
+import io.seata.core.context.RootContext;
 import jakarta.annotation.Resource;
 import jakarta.persistence.criteria.Predicate;
 import org.slf4j.Logger;
@@ -40,8 +43,10 @@ public class TicketService {
 
 
     public void save(TicketSaveReq req) {
+        LOG.info("seata全局事务ID save:{}", RootContext.getXID());
         Instant now = Instant.now();
         Ticket ticket = BeanUtil.copyProperties(req, Ticket.class);
+        LOG.info("ticket{} 保存", ticket.getId());
         if (ObjectUtil.isNull(ticket.getId())) {
             ticket.setId(SnowUtil.getSnowflakeNextId());
             ticket.setCreateTime(now);
@@ -51,6 +56,7 @@ public class TicketService {
             ticket.setUpdateTime(now);
             ticketRepository.save(ticket);
         }
+        //throw new BusinessException(BusinessExceptionEnum.BUSiNESS_MEMBER_FEIGN_TICKET_SAVE_ERROR);
     }
 
     public PageResp<TicketQueryResp> queryList(
