@@ -14,7 +14,8 @@ public enum BusinessExceptionEnum {
 
     CONFIRM_ORDER_TICKET_COUNT_ERROR("余票不足"),
 
-    BUSiNESS_MEMBER_FEIGN_TICKET_SAVE_ERROR("member feign 调用save失败");
+    BUSiNESS_MEMBER_FEIGN_TICKET_SAVE_ERROR("member feign 调用save失败"),
+    CONFIRM_ORDER_LOCK_FAIL("获取抢票锁失败");
 
     private String desc;
 

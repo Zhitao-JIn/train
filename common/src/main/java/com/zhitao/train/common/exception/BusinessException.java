@@ -5,6 +5,7 @@ public class BusinessException extends RuntimeException {
     private BusinessExceptionEnum e;
 
     public BusinessException(BusinessExceptionEnum e) {
+        super(e.getDesc());
         this.e = e;
     }
 
